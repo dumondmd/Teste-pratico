@@ -24,6 +24,6 @@ $factory->define(Veiculo::class, function (Faker $faker) {
         'modelo' => $faker->name,
         'marca' => $faker->name,
         'ano' => $faker->numberBetween(2000,2020),
-        'proprietario' => $faker->numberBetween(1,50)                                                                
+        'proprietario' => $faker->numberBetween(1,3)                                                                
     ];
 });

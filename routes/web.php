@@ -20,6 +20,11 @@ Route::get('/home', function () {
     return redirect()->route('veiculos');
 });
 
+Route::get('/admin/home', function () {
+    return redirect()->route('veiculos');
+});
+
+
 
 Route::group(['middleware'=>'auth'], function(){
     Route::get('/', function () {
