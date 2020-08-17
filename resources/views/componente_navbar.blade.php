@@ -5,36 +5,15 @@
 
   <div class="collapse navbar-collapse" id="navbarSupportedContent">
     <ul class="navbar-nav mr-auto">
-            
-      @if (Route::has('login'))
-                
-        @auth
-          <li @if($current=="home") class="nav-item active" @else class="nav-item" @endif>
-            <a class="nav-link" href="/">Home</a>
-          </li>
-          <li @if($current=="produtos") class="nav-item active" @else class="nav-item" @endif>
-            <a class="nav-link" href="/veiculos">Administrador</a>
-          </li>
-          <li @if($current=="categorias") class="nav-item active" @else class="nav-item" @endif>
-            <a class="nav-link" href="/cliente">Cliente</a>
-          </li>
-        @else
-          <li @if($current=="home") class="nav-item active" @else class="nav-item" @endif>
-            <a class="nav-link" href="/">Home</a>
-          </li>
-          <li class="nav-item active">
-            <a class="nav-link" href="{{ route('login') }}">Entre</a>
-          </li>
-          
-          <li class="nav-item active">
-            <a class="nav-link" href="{{ route('register') }}">Cadastre-se</a>
-          </li>
-        @endauth
-                
-      @endif
-
+                      
       
-
+          <li class="nav-item active">
+            <a class="nav-link" href="{{ route('veiculos') }}">Veiculos</a>
+          </li>
+          <li class="nav-item active">
+            <a class="nav-link" href="{{ route('logout') }}">Sair</a>
+          </li>
+      
     </ul>
 
   </div>

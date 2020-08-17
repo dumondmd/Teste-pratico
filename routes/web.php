@@ -11,32 +11,18 @@
 |
 */
 
-Route::get('/', function () {
-    return view('welcome');
-});
-
-Route::get('/veiculos', function () {
-    return view('veiculos');
-})->name('veiculos.administrador');
-
-Route::get('/cliente', function () {
-    return view('cliente');
-})->name('veiculos.cliente');
 
 Auth::routes();
-Route::get('/home', 'HomeController@index')->name('home');
 
-Route::group(['prefix'=>'admin', 'as'=>'admin.'], function () {
-    //Authentication Rotes
-    $this->get('login', 'Auth\LoginController@showLoginForm')->name('login');
-    $this->post('login', 'Auth\LoginController@login');
-    $this->post('logout', 'Auth\LoginController@logout')->name('logout');
+//Route::get('/home', 'HomeController@index')->name('home');
 
-    //Password Reset
-    $this->get('password/reset', 'Auth\ForgotPasswordController@showLinkRequestForm')->name('password.request');
-    $this->post('password/email', 'Auth\ForgotPasswordController@sendResetLinkEmail')->name('password.email');
-    $this->get('password/reset/{token}', 'Auth\ResetPasswordController@showResetForm')->name('password.reset');
-    $this->post('password/reset', 'Auth\ResetPasswordController@reset');
+Route::get('/home', function () {
+    return redirect()->route('veiculos');
+});
 
-    Route::get('/home', 'HomeController@index')->name('home');
+
+Route::group(['middleware'=>'auth'], function(){
+    Route::get('/', function () {
+        return view('veiculos');
+    })->name('veiculos');
 });

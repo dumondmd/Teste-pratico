@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\DB;
 use App\Veiculo;
 use App\User;
 
@@ -20,50 +21,49 @@ class VeiculosController extends Controller
         }
         return response('Cliente não encontrado', 404);
     }
-   /**
-     * Display a listing of the resource.
-     *
-     * @return \Illuminate\Http\Response
-     */
+
+
+
     public function indexView()
     {
-        //return view('veiculoutos');
-        //$user = User::all();
-        $usuarioadm = Auth::user()->role;
-        $usuarioInfo = Auth::user()->role;
+       //
+    }
 
-        if($usuarioadm = 2){
-            return view('veiculos');
+    public function buscaAvancada($id)
+    {
+        
+        if($id != 2){
+            $veiculos = DB::table('veiculos')
+                ->join('users', 'veiculos.proprietario', '=', 'users.id')
+                ->where('deleted_at', '=', null)
+                ->where('proprietario', '=', $id)
+                ->select('veiculos.*', 'users.name' )
+                ->get();     
+            return $veiculos->toJson();
         }
         else {
-            return view('cliente', compact('usuarioInfo'));
+            $veiculos = DB::table('veiculos')
+                ->join('users', 'veiculos.proprietario', '=', 'users.id')
+                ->where('deleted_at', '=', null)                
+                ->select('veiculos.*', 'users.name' )
+                ->get();     
+            return $veiculos->toJson();
         }
-
-        
     }
 
     public function index()
     {
-        $veiculos = Veiculo::all();
-        return $veiculos->toJson();
+        // $veiculos = Veiculo::whereNull('deleted_at')->get(); 
+        // return $veiculos->toJson();
     }
 
-    /**
-     * Show the form for creating a new resource.
-     *
-     * @return \Illuminate\Http\Response
-     */
+    
     public function create()
     {
         //
     }
 
-    /**
-     * Store a newly created resource in storage.
-     *
-     * @param  \Illuminate\Http\Request  $request
-     * @return \Illuminate\Http\Response
-     */
+   
     public function store(Request $request)
     {           
         $veiculo = new Veiculo();       
@@ -77,12 +77,7 @@ class VeiculosController extends Controller
         return json_encode($veiculo);
     }
 
-    /**
-     * Display the specified resource.
-     *
-     * @param  int  $id
-     * @return \Illuminate\Http\Response
-     */
+
     public function show($id)
     {
         $veiculo = Veiculo::find($id);
@@ -92,24 +87,12 @@ class VeiculosController extends Controller
         return response('Veículo não encontrado', 404);
     }
 
-    /**
-     * Show the form for editing the specified resource.
-     *
-     * @param  int  $id
-     * @return \Illuminate\Http\Response
-     */
+
     public function edit($id)
     {
         //
     }
 
-    /**
-     * Update the specified resource in storage.
-     *
-     * @param  \Illuminate\Http\Request  $request
-     * @param  int  $id
-     * @return \Illuminate\Http\Response
-     */
     public function update(Request $request, $id)
     {
         $veiculo = Veiculo::find($id);
@@ -126,12 +109,6 @@ class VeiculosController extends Controller
         return response('Veículo não encontrado', 404);
     }
 
-    /**
-     * Remove the specified resource from storage.
-     *
-     * @param  int  $id
-     * @return \Illuminate\Http\Response
-     */
     public function destroy($id)
     {
         $exclusao = date('Y-m-d H:i:s');                      

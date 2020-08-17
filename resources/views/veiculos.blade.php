@@ -3,7 +3,9 @@
 @section('body')
 <div class="card border">
 	<div class="card-body">
-		<h5 class="card-title">Cadastro de Veículos</h5>
+		
+        <h5 class="card-title text-center">Veículos - Usuário: {{ Auth::user()->name }}</h5>
+
 		<table class="table table-ordered table-hover" id="tabelaveiculos">
 			<thead>
 				<tr>
@@ -14,7 +16,7 @@
 					<th>Marca</th>
 					<th>Ano</th>
                     <th>Proprietário</th>
-                    <th>Ações</th>
+                    @if(Auth::user()->role==2)<th>Ações</th>@endif
 				</tr>
 			</thead>
 			<tbody>
@@ -24,10 +26,11 @@
 		</table>
 		
 	</div>
+    @if(Auth::user()->role==2)
 	<div class="card-footer">
 		<button class="btn btn-sm btn-primary" role="button" onclick="novoVeiculo()">Novo Veículo</button>
 	</div>
-	
+	@endif
 </div>
 
 <div class="modal" tabindex="-1" role="dialog" id="dlgveiculos">
@@ -130,20 +133,36 @@
     }
     
     function montarLinha(p) {
-        var linha = "<tr>" +
-            "<td>" + p.id + "</td>" +
-            "<td>" + p.placa + "</td>" +
-            "<td>" + p.renavam + "</td>" +
-            "<td>" + p.modelo + "</td>" +
-            "<td>" + p.marca + "</td>" +
-            "<td>" + p.ano + "</td>" +
-            "<td>" + p.proprietario + "</td>" +
-            "<td>" +
-              '<button class="btn btn-sm btn-primary" onclick="editar(' + p.id + ')"> Editar </button> ' +
-              '<button class="btn btn-sm btn-danger" onclick="remover(' + p.id + ')"> Apagar </button> ' +
-            "</td>" +
+        //Usuario 2 = Admin
+        var roleUser = {{ Auth::user()->role }};
+        if(roleUser==2){
+            var linha = "<tr>" +
+                "<td>" + p.id + "</td>" +
+                "<td>" + p.placa + "</td>" +
+                "<td>" + p.renavam + "</td>" +
+                "<td>" + p.modelo + "</td>" +
+                "<td>" + p.marca + "</td>" +
+                "<td>" + p.ano + "</td>" +
+                "<td>" + p.name + "</td>" +            
+                "<td>" +
+                  '<button class="btn btn-sm btn-primary" onclick="editar(' + p.id + ')"> Editar </button> ' +
+                  '<button class="btn btn-sm btn-danger" onclick="remover(' + p.id + ')"> Apagar </button> ' +
+                "</td>" +
             "</tr>";
-        return linha;
+            return linha;
+        } else {
+            var linha = "<tr>" +
+                "<td>" + p.id + "</td>" +
+                "<td>" + p.placa + "</td>" +
+                "<td>" + p.renavam + "</td>" +
+                "<td>" + p.modelo + "</td>" +
+                "<td>" + p.marca + "</td>" +
+                "<td>" + p.ano + "</td>" +
+                "<td>" + p.name + "</td>" +                            
+            "</tr>";
+            return linha;
+        }
+        
     }
     
     function editar(id) {
@@ -181,7 +200,8 @@
     }
     
     function carregarVeiculos() {
-        $.getJSON('/api/veiculos', function(veiculos) { 
+        var id = {{ Auth::user()->role }};
+        $.getJSON("/api/veiculos/buscaavancada/" + id, function(veiculos) { 
             for(i=0;i<veiculos.length;i++) {
                 linha = montarLinha(veiculos[i]);
                 $('#tabelaveiculos>tbody').append(linha);
@@ -221,7 +241,7 @@
             url: "/api/veiculos/" + prod.id,
             context: this,
             data: prod,
-            success: function(data) {
+            success: function(data) {                
                 prod = JSON.parse(data);
                 linhas = $("#tabelaveiculos>tbody>tr");
                 e = linhas.filter( function(i, e) { 

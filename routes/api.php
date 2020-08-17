@@ -20,3 +20,4 @@ Route::middleware('auth:api')->get('/user', function (Request $request) {
 Route::resource('/veiculos', 'VeiculosController');
 Route::get('/clientes', 'VeiculosController@ListarCliente');
 Route::get('/clientes/{id}', 'VeiculosController@ListarClienteId');
+Route::get('/veiculos/buscaavancada/{id}', 'VeiculosController@buscaAvancada');

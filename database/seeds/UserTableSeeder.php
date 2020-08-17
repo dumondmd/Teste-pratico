@@ -1,7 +1,7 @@
 <?php
 
 use Illuminate\Database\Seeder;
-
+use App\Veiculo;
 class UserTableSeeder extends Seeder
 {
     /**
@@ -26,6 +26,8 @@ class UserTableSeeder extends Seeder
          ]);
 
         factory(\App\User::class, 50)->states('user')->create();
+
+        factory(Veiculo::class, 25)->create();
 
     }
 }
