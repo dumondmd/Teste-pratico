@@ -11,6 +11,7 @@ let mix = require('laravel-mix');
  |
  */
 
+
 mix
     .copy('node_modules/notyf/notyf.min.js', 'public/vendor')
     .copy('node_modules/notyf/notyf.min.css', 'public/vendor')

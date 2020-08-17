@@ -15,6 +15,14 @@ Route::get('/', function () {
     return view('welcome');
 });
 
+Route::get('/veiculos', function () {
+    return view('veiculos');
+})->name('veiculos.administrador');
+
+Route::get('/cliente', function () {
+    return view('cliente');
+})->name('veiculos.cliente');
+
 Auth::routes();
 Route::get('/home', 'HomeController@index')->name('home');
 
